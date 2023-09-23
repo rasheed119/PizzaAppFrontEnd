@@ -1,0 +1,1 @@
+export const api = "https://pizzadeliverybackend-0tix.onrender.com"
