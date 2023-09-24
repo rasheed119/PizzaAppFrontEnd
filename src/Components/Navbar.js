@@ -88,7 +88,7 @@ function Navbar() {
         <ListItem disablePadding>
           <ListItemButton
             sx={{ textAlign: "center" }}
-            onClick={() => navigate("/createurl")}
+            onClick={() => navigate("/cart")}
           >
             <ListItemText>
               <StyledBadge
@@ -164,7 +164,7 @@ function Navbar() {
 
               <Button
                 sx={{ color: "#fff" }}
-                onClick={() => navigate("/createurl")}
+                onClick={() => navigate("/cart")}
               >
                 <Typography sx={{ marginRight: "5px" }}>Cart</Typography>
                 <StyledBadge

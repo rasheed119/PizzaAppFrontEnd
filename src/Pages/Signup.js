@@ -17,6 +17,7 @@ import CircularColor from "../Components/CircularProgress";
 import Snackbar from "@mui/material/Snackbar";
 import MuiAlert from "@mui/material/Alert";
 import { useNavigate, Link } from "react-router-dom";
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 
 const defaultTheme = createTheme();
 
@@ -207,7 +208,8 @@ function Signup() {
 
               <Grid container>
                 <Grid item xs>
-                  <Link to="/login">Back to Login Page</Link>
+                  <Link to="/">
+                    Back to Login Page</Link>
                 </Grid>
               </Grid>
             </Box>

@@ -57,7 +57,7 @@ function ForgotPassword() {
           setSnackbarSeverity("success");
           setSnackbarOpen(true);
           setTimeout(() => {
-            navigate("/login");
+            navigate("/");
           }, 4000);
         } catch (error) {
           setshow(true);

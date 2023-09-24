@@ -22,7 +22,7 @@ const CartSlice = createSlice({
       );
 
       if (exsisting_pizza) {
-        exsisting_pizza.quantity++;
+        exsisting_pizza.quantity += quantity;
 
         exsisting_pizza.price += pizza.prices[varient] * quantity;
 
