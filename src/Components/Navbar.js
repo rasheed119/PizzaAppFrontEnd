@@ -19,7 +19,7 @@ import MuiAlert from "@mui/material/Alert";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import Badge from "@mui/material/Badge";
 import { styled } from "@mui/material/styles";
-import { UseSelector, useSelector } from "react-redux/es/hooks/useSelector";
+import { useSelector } from "react-redux/es/hooks/useSelector";
 
 const drawerWidth = 240;
 
@@ -36,10 +36,9 @@ function Navbar() {
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState("");
   const [snackbarSeverity, setSnackbarSeverity] = useState("success");
-
   const [mobileOpen, setMobileOpen] = useState(false);
 
-  const cart = useSelector((state) => state.cart);
+  const store = useSelector((state)=>state.cart.store.cartitems.length);
 
   const navigate = useNavigate();
 
@@ -92,7 +91,7 @@ function Navbar() {
           >
             <ListItemText>
               <StyledBadge
-                badgeContent={cart.cartitems.length}
+                badgeContent={store}
                 color="secondary"
               >
                 <Typography>Cart</Typography>
@@ -168,7 +167,7 @@ function Navbar() {
               >
                 <Typography sx={{ marginRight: "5px" }}>Cart</Typography>
                 <StyledBadge
-                  badgeContent={cart.cartitems.length}
+                  badgeContent={store}
                   color="secondary"
                 >
                   <ShoppingCartIcon />

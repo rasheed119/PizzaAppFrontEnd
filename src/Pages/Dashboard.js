@@ -12,8 +12,7 @@ function Dashboard() {
 
   const pizza = useSelector((state) => state.pizza);
 
-  const cart = useSelector((state) => state.cart);
-  console.log(cart);
+
 
   useEffect(() => {
     dispatch(fetchallpizza());
