@@ -7,17 +7,19 @@ import Cart from "./Pages/Cart";
 import Verify from "./Pages/Verify";
 import ForgotPassword from "./Pages/ForgotPassword";
 import ResetPassword from "./Pages/ResetPassword";
+import Checkout from "./Pages/Checkout";
 
 function App() {
   return (
     <Routes>
       <Route path="/dashboard" element={<Dashboard />} />
-      <Route path="/" element={<Login />} />
-      <Route path="/signup" element={<Signup />} />
+      <Route path="/login" element={<Login />} />
+      <Route path="/" element={<Signup />} />
       <Route path="/cart" element={<Cart />} />
       <Route path="/verify/:email" element={<Verify />} />
       <Route path="/forgotpassword" element={<ForgotPassword />} />
       <Route path="/resetpassword" element={<ResetPassword />} />
+      <Route path="/checkout" element={<Checkout />} />
     </Routes>
   );
 }

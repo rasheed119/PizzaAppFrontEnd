@@ -17,7 +17,6 @@ import CircularColor from "../Components/CircularProgress";
 import Snackbar from "@mui/material/Snackbar";
 import MuiAlert from "@mui/material/Alert";
 import { useNavigate, Link } from "react-router-dom";
-import { useCookies } from "react-cookie";
 
 const defaultTheme = createTheme();
 
@@ -199,7 +198,7 @@ function Login() {
                   <Link to="/forgotpassword">Forgot password?</Link>
                 </Grid>
                 <Grid item>
-                  <Link to="/signup">{"Don't have an account? Sign Up"}</Link>
+                  <Link to="/">{"Don't have an account? Sign Up"}</Link>
                 </Grid>
               </Grid>
             </Box>

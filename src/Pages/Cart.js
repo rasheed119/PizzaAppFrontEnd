@@ -17,13 +17,18 @@ import { useDispatch, useSelector } from "react-redux";
 import { Divider } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
-import { singleaddtocart } from "../Slice/CartSlice";
+import { removefromCart, singleaddtocart } from "../Slice/CartSlice";
+import DeleteIcon from "@mui/icons-material/Delete";
+import Alert from "@mui/material/Alert";
+import Stack from "@mui/material/Stack";
+import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
+import { useNavigate } from "react-router-dom";
 
 function Cart() {
   const store = useSelector((state) => state.cart.store);
   const cart_items = store.cartitems;
 
-  //console.log(cart_items)
+  const navigate = useNavigate()
 
   const dispatch = useDispatch();
   return (
@@ -38,6 +43,22 @@ function Cart() {
               columns={{ xs: 4, sm: 8, md: 12 }}
             >
               <Grid item xs={12} md={8} lg={8}>
+                {cart_items.length === 0 ? (
+                  <Stack sx={{ width: "100%" }} spacing={2}>
+                    <Alert
+                      severity="info"
+                      style={{
+                        fontFamily: "Poppins",
+                        fontSize: "24px",
+                        textAlign: "center",
+                      }}
+                    >
+                      Looks like you're not Hungry 😟
+                    </Alert>
+                  </Stack>
+                ) : (
+                  ""
+                )}
                 {cart_items.map((pizza, index) => (
                   <>
                     <Card
@@ -88,8 +109,15 @@ function Cart() {
                               backgroundColor: "#f44336",
                               ":hover": { backgroundColor: "#aa2e25" },
                             }}
+                            onClick={() => {
+                              dispatch(removefromCart({ pizza }));
+                            }}
                           >
-                            <RemoveIcon />
+                            {pizza.quantity === 1 ? (
+                              <DeleteIcon />
+                            ) : (
+                              <RemoveIcon />
+                            )}
                           </IconButton>
                           <TextField
                             disabled
@@ -127,7 +155,7 @@ function Cart() {
               >
                 <Card
                   sx={{
-                    width: { xs: "100%", md: "30%",lg: "30%" },
+                    width: { xs: "100%", md: "25%", lg: "25%" },
                     boxShadow: "10",
                     borderRadius: "16px",
                     position: { xs: "static", md: "fixed" },
@@ -210,8 +238,10 @@ function Cart() {
                       }}
                       variant="contained"
                       size="large"
+                      onClick={()=>navigate("/checkout")}
                     >
-                      Place Order
+                      Proceed to CheckOut{" "}
+                      <ArrowForwardIcon sx={{ fontSize : "24px" }} />
                     </Button>
                   </CardActions>
                 </Card>

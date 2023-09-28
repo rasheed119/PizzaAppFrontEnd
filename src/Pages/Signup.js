@@ -17,7 +17,7 @@ import CircularColor from "../Components/CircularProgress";
 import Snackbar from "@mui/material/Snackbar";
 import MuiAlert from "@mui/material/Alert";
 import { useNavigate, Link } from "react-router-dom";
-import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 
 const defaultTheme = createTheme();
 
@@ -57,7 +57,9 @@ function Signup() {
         setloading(true);
         try {
           const user = await axios.post(`${api}/users/register`, user_data);
-          setSnackbarMessage(user.data.message+", Redirecting to Sign In Page ....");
+          setSnackbarMessage(
+            user.data.message + ", Redirecting to Sign In Page ...."
+          );
           setSnackbarSeverity("success");
           setSnackbarOpen(true);
           setloading(false);
@@ -72,6 +74,7 @@ function Signup() {
         }
       },
     });
+  console.log(values.email);
 
   function handleCloseSnackbar() {
     setSnackbarOpen(false);
@@ -208,8 +211,10 @@ function Signup() {
 
               <Grid container>
                 <Grid item xs>
-                  <Link to="/">
-                    Back to Login Page</Link>
+                  <Typography fontFamily="Poppins">
+                    Have an account ?{" "}
+                    <Link to="/login">Login</Link>
+                  </Typography>
                 </Grid>
               </Grid>
             </Box>

@@ -8,20 +8,22 @@ import {
   CardMedia,
   FormControl,
   Grid,
-  Input,
   InputLabel,
   MenuItem,
   Select,
   Typography,
 } from "@mui/material";
 import React, { useState } from "react";
-import { addtoCart, removefromCart } from "../Slice/CartSlice";
-import { useDispatch } from "react-redux";
+import { addtoCart, singleremovefromcart } from "../Slice/CartSlice";
+import { useDispatch, useSelector } from "react-redux";
 
 function Pizza({ pizza }) {
   const [quantity, setquantity] = useState(1);
   const [varient, setvarient] = useState("small");
-  const [show, setShow] = useState(true);
+
+  const cartitems = useSelector((state) => state.cart.store.cartitems);
+
+  const itemInCart = cartitems.find((item) => item._id === pizza._id);
 
   const dispatch = useDispatch();
 
@@ -60,66 +62,71 @@ function Pizza({ pizza }) {
               </Typography>
             </CardContent>
           </CardActionArea>
-          <CardActions>
-            <Grid container>
-              <Grid
-                item
-                xs={6}
-                sx={{ display: "flex", justifyContent: "center" }}
-              >
-                <Box sx={{ minWidth: 120 }}>
-                  <FormControl fullWidth>
-                    <InputLabel id="demo-simple-select-label">
-                      Variants
-                    </InputLabel>
-                    <Select
-                      labelId="demo-simple-select-label"
-                      id="demo-simple-select"
-                      value={varient}
-                      label="Variants"
-                      onChange={(e) => {
-                        setvarient(e.target.value);
-                      }}
-                    >
-                      {pizza.varients.map((varients, index) => (
-                        <MenuItem value={varients} key={index}>
-                          {varients}
-                        </MenuItem>
-                      ))}
-                    </Select>
-                  </FormControl>
-                </Box>
+          {!itemInCart ? (
+            <CardActions>
+              <Grid container>
+                <Grid
+                  item
+                  xs={6}
+                  sx={{ display: "flex", justifyContent: "center" }}
+                >
+                  <Box sx={{ minWidth: 120 }}>
+                    <FormControl fullWidth>
+                      <InputLabel id="demo-simple-select-label">
+                        Variants
+                      </InputLabel>
+                      <Select
+                        labelId="demo-simple-select-label"
+                        id="demo-simple-select"
+                        value={varient}
+                        label="Variants"
+                        onChange={(e) => {
+                          setvarient(e.target.value);
+                        }}
+                      >
+                        {pizza.varients.map((varients, index) => (
+                          <MenuItem value={varients} key={index}>
+                            {varients}
+                          </MenuItem>
+                        ))}
+                      </Select>
+                    </FormControl>
+                  </Box>
+                </Grid>
+                <Grid
+                  item
+                  xs={6}
+                  sx={{ display: "flex", justifyContent: "center" }}
+                >
+                  <Box sx={{ minWidth: 120 }}>
+                    <FormControl fullWidth>
+                      <InputLabel id="demo-simple-select-label">
+                        Quantity
+                      </InputLabel>
+                      <Select
+                        labelId="demo-simple-select-label"
+                        id="demo-simple-select"
+                        value={quantity}
+                        label="Quantity"
+                        onChange={(e) => {
+                          setquantity(e.target.value);
+                        }}
+                      >
+                        {[...Array(10).keys()].map((values, index) => (
+                          <MenuItem value={index + 1} key={index}>
+                            {index + 1}
+                          </MenuItem>
+                        ))}
+                      </Select>
+                    </FormControl>
+                  </Box>
+                </Grid>
               </Grid>
-              <Grid
-                item
-                xs={6}
-                sx={{ display: "flex", justifyContent: "center" }}
-              >
-                <Box sx={{ minWidth: 120 }}>
-                  <FormControl fullWidth>
-                    <InputLabel id="demo-simple-select-label">
-                      Quantity
-                    </InputLabel>
-                    <Select
-                      labelId="demo-simple-select-label"
-                      id="demo-simple-select"
-                      value={quantity}
-                      label="Quantity"
-                      onChange={(e) => {
-                        setquantity(e.target.value);
-                      }}
-                    >
-                      {[...Array(10).keys()].map((values, index) => (
-                        <MenuItem value={index + 1} key={index}>
-                          {index + 1}
-                        </MenuItem>
-                      ))}
-                    </Select>
-                  </FormControl>
-                </Box>
-              </Grid>
-            </Grid>
-          </CardActions>
+            </CardActions>
+          ) : (
+            ""
+          )}
+
           <CardActions>
             <Grid container>
               <Grid
@@ -139,15 +146,26 @@ function Pizza({ pizza }) {
                 sx={{ display: "flex", justifyContent: "center" }}
               >
                 <Box sx={{ minWidth: 120 }}>
-                  <Button
-                    variant="contained"
-                    onClick={() => {
-                      dispatch(addtoCart({ quantity, varient, pizza }));
-                      setShow(false);
-                    }}
-                  >
-                    Add to Cart
-                  </Button>
+                  {itemInCart ? (
+                    <Button
+                      variant="contained"
+                      onClick={() => {
+                        dispatch(singleremovefromcart({ pizza }));
+                      }}
+                      color="error"
+                    >
+                      Remove from Cart
+                    </Button>
+                  ) : (
+                    <Button
+                      variant="contained"
+                      onClick={() => {
+                        dispatch(addtoCart({ quantity, varient, pizza }));
+                      }}
+                    >
+                      Add to Cart
+                    </Button>
+                  )}
                 </Box>
               </Grid>
             </Grid>

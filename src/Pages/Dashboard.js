@@ -6,13 +6,13 @@ import { Box, Container } from "@mui/material";
 import CircularColor from "../Components/CircularProgress";
 import Grid from "@mui/material/Grid";
 import Pizza from "../Components/Pizza";
+import Alert from "@mui/material/Alert";
+import Stack from "@mui/material/Stack";
 
 function Dashboard() {
   const dispatch = useDispatch();
 
   const pizza = useSelector((state) => state.pizza);
-
-
 
   useEffect(() => {
     dispatch(fetchallpizza());
@@ -31,12 +31,18 @@ function Dashboard() {
             >
               {pizza.isLoading ? (
                 <CircularColor />
+              ) : pizza.isError ? (
+                <>
+                  <Stack sx={{ width: "100%" }} spacing={2}>
+                    <Alert severity="error">Something went Wrong</Alert>
+                  </Stack>
+                </>
               ) : (
                 pizza.pizza &&
                 pizza.pizza.map((item, index) => (
-                  <Pizza pizza = {item} key={index} />
-                  )
-              ))}
+                  <Pizza pizza={item} key={index} />
+                ))
+              )}
             </Grid>
           </Box>
         </Container>
