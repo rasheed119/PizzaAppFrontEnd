@@ -8,11 +8,18 @@ import Verify from "./Pages/Verify";
 import ForgotPassword from "./Pages/ForgotPassword";
 import ResetPassword from "./Pages/ResetPassword";
 import Checkout from "./Pages/Checkout";
+import Ordereditem from "./Pages/Ordereditem";
+import Myorders from "./Pages/Myorders";
+import Nopagefound from "./Pages/Nopagefound";
+import Editpizza from "./Pages/Editpizza";
+import Addpizza from "./Pages/Addpizza";
 
 function App() {
   return (
     <Routes>
       <Route path="/dashboard" element={<Dashboard />} />
+      <Route path="/addpizza" element={<Addpizza />} />
+      <Route path="/editpizza/:id" element={<Editpizza />} />
       <Route path="/login" element={<Login />} />
       <Route path="/" element={<Signup />} />
       <Route path="/cart" element={<Cart />} />
@@ -20,6 +27,9 @@ function App() {
       <Route path="/forgotpassword" element={<ForgotPassword />} />
       <Route path="/resetpassword" element={<ResetPassword />} />
       <Route path="/checkout" element={<Checkout />} />
+      <Route path="/ordereditem" element={<Ordereditem />} />
+      <Route path="/myorders" element={<Myorders />} />
+      <Route path="*" element={<Nopagefound />} />
     </Routes>
   );
 }

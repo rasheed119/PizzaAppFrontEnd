@@ -11,12 +11,12 @@ import Typography from "@mui/material/Typography";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import * as yup from "yup";
 import { useFormik } from "formik";
-import { api } from "../Config/Config";
-import axios from "axios";
 import CircularColor from "../Components/CircularProgress";
 import Snackbar from "@mui/material/Snackbar";
 import MuiAlert from "@mui/material/Alert";
 import { useNavigate, Link } from "react-router-dom";
+import axios from "axios";
+import { api } from "../Config/Config";
 
 const defaultTheme = createTheme();
 
@@ -36,12 +36,11 @@ const login_validation_schema = yup.object().shape({
 
 function Login() {
   const navigate = useNavigate();
+  const [loading, setloading] = useState(false);
 
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState("");
   const [snackbarSeverity, setSnackbarSeverity] = useState("success");
-
-  const [loading, setloading] = useState(false);
 
   const { values, handleChange, handleSubmit, handleBlur, errors, touched } =
     useFormik({
@@ -53,34 +52,30 @@ function Login() {
       onSubmit: async (user_data) => {
         setloading(true);
         try {
-          const user = await axios.post(`${api}/users/login`, user_data);
-          if (user.data.message === "Log in Successfull") {
-            if (user.data.Verification === true) {
-              setSnackbarMessage(
-                user.data.message + ", Redirecting to Dashboard..."
-              );
-              setSnackbarSeverity("success");
-              setSnackbarOpen(true);
-              console.log(user.data);
-              window.localStorage.setItem("token", user.data.token);
-              window.localStorage.setItem("userID", user.data.userID);
-              setTimeout(() => {
-                navigate("/dashboard");
-              }, 3000);
-            } else {
-              setSnackbarMessage(
-                "Your Account is not Verified,Please Check the mail to Continue"
-              );
-              setSnackbarSeverity("warning");
-              setSnackbarOpen(true);
-              setloading(false);
-            }
+          const response = await axios.post(`${api}/users/login`, user_data);
+          const data = response.data;
+          if (data) {
+            window.localStorage.setItem("user_data", JSON.stringify(data));
+          }
+          if (data.Verification) {
+            setSnackbarMessage(data.message + " Redirecting to Dashboard...");
+            setSnackbarSeverity("success");
+            setSnackbarOpen(true);
+            setTimeout(() => {
+              navigate("/dashboard");
+            }, 1000);
+          } else {
+            setloading(false);
+            setSnackbarMessage("Your Account is Not Verified");
+            snackbarSeverity("warning");
+            setSnackbarOpen(true);
           }
         } catch (error) {
+          setloading(false);
+          console.log(error);
           setSnackbarMessage(error.response.data.message);
           setSnackbarSeverity("error");
           setSnackbarOpen(true);
-          setloading(false);
         }
       },
     });
@@ -137,8 +132,8 @@ function Login() {
                   value={values.email}
                   onChange={handleChange}
                   onBlur={handleBlur}
-                  error
                   required
+                  error
                   helperText={errors.email}
                 />
               ) : (
@@ -153,18 +148,19 @@ function Login() {
                   required
                 />
               )}
+
               {errors.password && touched.password ? (
                 <TextField
                   margin="normal"
                   required
+                  name="password"
                   fullWidth
                   value={values.password}
                   onChange={handleChange}
                   onBlur={handleBlur}
-                  name="password"
-                  error
                   label="Password"
                   type="password"
+                  error
                   helperText={errors.password}
                 />
               ) : (
@@ -201,6 +197,26 @@ function Login() {
                   <Link to="/">{"Don't have an account? Sign Up"}</Link>
                 </Grid>
               </Grid>
+              <Paper
+                variant="outlined"
+                sx={{ my: { xs: 3, md: 6 }, p: { xs: 2, md: 3 } }}
+              >
+                <Typography
+                  fontFamily="Poppins"
+                  align="center"
+                  fontWeight="600"
+                >
+                  Admin Login
+                </Typography>
+                <Box>
+                  <Typography fontFamily="Poppins" sx={{ mt: 2 }}>
+                    Email : admin123@gmail.com
+                  </Typography>
+                  <Typography fontFamily="Poppins" sx={{ mt: 2 }}>
+                    Password : admin123
+                  </Typography>
+                </Box>
+              </Paper>
             </Box>
           </Box>
         </Grid>

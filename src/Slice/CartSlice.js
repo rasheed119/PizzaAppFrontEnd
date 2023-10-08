@@ -36,10 +36,8 @@ const CartSlice = createSlice({
       const existingPizzaIndex = state.store.cartitems.findIndex(
         (item) => item._id === pizza._id
       );
-
       if (existingPizzaIndex !== -1) {
         const existingPizza = state.store.cartitems[existingPizzaIndex];
-
         if (existingPizza.quantity > 1) {
           existingPizza.quantity--;
           existingPizza.price -= existingPizza.prices[existingPizza.varient];
@@ -72,6 +70,10 @@ const CartSlice = createSlice({
       state.store.total_price -= existingPizza.price;
       state.store.cartitems.splice(existingPizzaIndex, 1);
     },
+    remove_all_items_from_cart(state) {
+      state.store.cartitems.splice(0, state.store.cartitems.length);
+      state.store.total_price = 0;
+    },
   },
 });
 
@@ -80,6 +82,7 @@ export const {
   removefromCart,
   singleaddtocart,
   singleremovefromcart,
+  remove_all_items_from_cart
 } = CartSlice.actions;
 
 export const cart_reducer = CartSlice.reducer;

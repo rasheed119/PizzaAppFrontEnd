@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import Navbar from "../Components/Navbar";
 import {
   Box,
@@ -21,16 +21,24 @@ import { removefromCart, singleaddtocart } from "../Slice/CartSlice";
 import DeleteIcon from "@mui/icons-material/Delete";
 import Alert from "@mui/material/Alert";
 import Stack from "@mui/material/Stack";
-import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
+import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import { useNavigate } from "react-router-dom";
+import Snackbar from "@mui/material/Snackbar";
+import MuiAlert from "@mui/material/Alert";
 
 function Cart() {
   const store = useSelector((state) => state.cart.store);
   const cart_items = store.cartitems;
 
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   const dispatch = useDispatch();
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
+  const [snackbarMessage, setSnackbarMessage] = useState("");
+  const [snackbarSeverity, setSnackbarSeverity] = useState("success");
+  function handleCloseSnackbar() {
+    setSnackbarOpen(false);
+  }
   return (
     <>
       <Navbar />
@@ -47,6 +55,7 @@ function Cart() {
                   <Stack sx={{ width: "100%" }} spacing={2}>
                     <Alert
                       severity="info"
+                      icon={false}
                       style={{
                         fontFamily: "Poppins",
                         fontSize: "24px",
@@ -238,10 +247,18 @@ function Cart() {
                       }}
                       variant="contained"
                       size="large"
-                      onClick={()=>navigate("/checkout")}
+                      onClick={() => {
+                        if (cart_items.length === 0) {
+                          setSnackbarMessage("Cart is Empty");
+                          setSnackbarSeverity("error");
+                          setSnackbarOpen(true);
+                        } else {
+                          navigate("/checkout");
+                        }
+                      }}
                     >
                       Proceed to CheckOut{" "}
-                      <ArrowForwardIcon sx={{ fontSize : "24px" }} />
+                      <ArrowForwardIcon sx={{ fontSize: "24px" }} />
                     </Button>
                   </CardActions>
                 </Card>
@@ -250,6 +267,21 @@ function Cart() {
           </Box>
         </Container>
       </Box>
+      <Snackbar
+        open={snackbarOpen}
+        autoHideDuration={4000}
+        onClose={handleCloseSnackbar}
+        anchorOrigin={{ vertical: "top", horizontal: "center" }}
+      >
+        <MuiAlert
+          elevation={6}
+          variant="filled"
+          onClose={handleCloseSnackbar}
+          severity={snackbarSeverity}
+        >
+          {snackbarMessage}
+        </MuiAlert>
+      </Snackbar>
     </>
   );
 }

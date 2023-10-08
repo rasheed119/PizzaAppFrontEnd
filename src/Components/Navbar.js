@@ -19,7 +19,7 @@ import MuiAlert from "@mui/material/Alert";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import Badge from "@mui/material/Badge";
 import { styled } from "@mui/material/styles";
-import { useSelector } from "react-redux/es/hooks/useSelector";
+import { useSelector } from "react-redux";
 
 const drawerWidth = 240;
 
@@ -38,7 +38,11 @@ function Navbar() {
   const [snackbarSeverity, setSnackbarSeverity] = useState("success");
   const [mobileOpen, setMobileOpen] = useState(false);
 
-  const store = useSelector((state)=>state.cart.store.cartitems.length);
+  const store = useSelector((state) => state.cart.store.cartitems.length);
+
+  const json_user_data = window.localStorage.getItem("user_data");
+  const user_data = JSON.parse(json_user_data);
+  const userid = user_data ? user_data.userID : "";
 
   const navigate = useNavigate();
 
@@ -47,8 +51,7 @@ function Navbar() {
   };
 
   const handle_login = () => {
-    window.localStorage.removeItem("token");
-    window.localStorage.removeItem("userID");
+    localStorage.removeItem("user_data");
     setSnackbarMessage("Logging Out...");
     setSnackbarSeverity("warning");
     setSnackbarOpen(true);
@@ -68,7 +71,7 @@ function Navbar() {
       </Typography>
       <Divider />
       <List>
-        {!window.localStorage.getItem("userID") ? (
+        {!userid ? (
           <ListItem disablePadding>
             <ListItemButton
               sx={{ textAlign: "center" }}
@@ -90,10 +93,7 @@ function Navbar() {
             onClick={() => navigate("/cart")}
           >
             <ListItemText>
-              <StyledBadge
-                badgeContent={store}
-                color="secondary"
-              >
+              <StyledBadge badgeContent={store} color="secondary">
                 <Typography>Cart</Typography>
                 <ShoppingCartIcon />
               </StyledBadge>
@@ -109,6 +109,17 @@ function Navbar() {
             <ListItemText>Dashboard</ListItemText>
           </ListItemButton>
         </ListItem>
+
+        {userid && (
+          <ListItem disablePadding>
+            <ListItemButton
+              sx={{ textAlign: "center" }}
+              onClick={() => navigate("/myorders")}
+            >
+              <ListItemText>My Orders</ListItemText>
+            </ListItemButton>
+          </ListItem>
+        )}
       </List>
     </Box>
   );
@@ -161,20 +172,29 @@ function Navbar() {
                 Dashboard
               </Button>
 
-              <Button
-                sx={{ color: "#fff" }}
-                onClick={() => navigate("/cart")}
-              >
+              <Button sx={{ color: "#fff" }} onClick={() => navigate("/cart")}>
                 <Typography sx={{ marginRight: "5px" }}>Cart</Typography>
                 <StyledBadge
                   badgeContent={store}
+                  sx={{ marginRight: "5px" }}
                   color="secondary"
                 >
                   <ShoppingCartIcon />
                 </StyledBadge>
               </Button>
 
-              {window.localStorage.getItem("userID") ? (
+              {userid && (
+                <>
+                  <Button
+                    sx={{ color: "#fff" }}
+                    onClick={() => navigate("/myorders")}
+                  >
+                    My Orders
+                  </Button>
+                </>
+              )}
+
+              {userid ? (
                 <Button sx={{ color: "#fff" }} onClick={handle_login}>
                   Log out
                 </Button>

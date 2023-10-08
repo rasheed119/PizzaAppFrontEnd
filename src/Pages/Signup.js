@@ -17,7 +17,6 @@ import CircularColor from "../Components/CircularProgress";
 import Snackbar from "@mui/material/Snackbar";
 import MuiAlert from "@mui/material/Alert";
 import { useNavigate, Link } from "react-router-dom";
-import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 
 const defaultTheme = createTheme();
 
